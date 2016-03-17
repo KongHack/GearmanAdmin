@@ -4,20 +4,8 @@ namespace GCWorld\GearmanAdmin;
 use Exception;
 
 /**
- * Monitoring Gearman over telnet port 4730
- *
- * So the only way to monitor Gearman is via doing a telnet to port 4730. The
- * current monitoring supported commands are fairly basic.
- * There are plans to include more set of commands in the next release.
- * @version 1.1 (Modified by Lior Ben-Kereth)
- * A class that contains separated and aggragated workers and status data from all gearman server in a cluster
- *
- * @source https://github.com/preillyme/php
- * @author liorbk
- * @author preilly@php.net
- * @category   PHP
- * @package    GearmanTelnet
- * @copyright  Copyright (c) 2013 Patrick Reilly (http://www.facebook.com/preilly)
+ * Class GearmanClusterAdmin
+ * @package GCWorld\GearmanAdmin
  */
 class GearmanClusterAdmin
 {
