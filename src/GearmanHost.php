@@ -69,10 +69,15 @@ class GearmanHost
         $status        = $this->rawStatus;
 
         for ($i = 0; $i < count($status); $i++) {
-            if(!array_key_exists($i,$status)) {
+            $keywords = preg_split('/\s+/', $status[$i]);
+            if(count($keywords) < 4) {
                 continue;
             }
-            @list($job, $total, $running, $available) = explode("	", $status[$i]);
+            $job = $keywords[0];
+            $total = $keywords[1];
+            $running = $keywords[2];
+            $available = $keywords[3];
+
             if (!empty($job)) {
                 $available = trim($available);
                 $total     = trim($total);
