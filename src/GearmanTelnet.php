@@ -37,6 +37,7 @@ class GearmanTelnet
         }
     }
 
+    /* GEARMAN_COMMAND_GET_STATUS */
     /**
      * Command: STATUS
      *
@@ -54,8 +55,6 @@ class GearmanTelnet
      * not all be working on it due to other tasks holding them busy.
      *
      */
-
-    /* GEARMAN_COMMAND_GET_STATUS */
     public function getStatus()
     {
         if ($this->exec('STATUS')) {
@@ -63,8 +62,12 @@ class GearmanTelnet
 
             return implode("", $get_status);
         }
+
+        return '';
     }
 
+
+    /* GEARMAN_COMMAND_WORK_STATUS */
     /**
      * Command : Workers
      *
@@ -75,8 +78,6 @@ class GearmanTelnet
      * - Client ID: Unique ID assigned to client
      * - Functions: List of functions this client has registered for.
      */
-
-    /* GEARMAN_COMMAND_WORK_STATUS */
     public function getWorkers()
     {
         if ($this->exec('WORKERS')) {

@@ -69,6 +69,9 @@ class GearmanHost
         $status        = $this->rawStatus;
 
         for ($i = 0; $i < count($status); $i++) {
+            if(!array_key_exists($i,$status)) {
+                continue;
+            }
             @list($job, $total, $running, $available) = explode("	", $status[$i]);
             if (!empty($job)) {
                 $available = trim($available);
@@ -90,8 +93,6 @@ class GearmanHost
                 $this->workers[$workerType][GearmanHost::WORKER_QUEUED] += ($total - $running);
             }
         }
-
-        //		print_r($this->workers);
     }
 
     private function initWorkers()

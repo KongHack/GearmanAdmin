@@ -21,8 +21,8 @@ use Exception;
  */
 class GearmanClusterAdmin
 {
-    private $accumaltiveJobs    = array();
-    private $accumaltiveWorkers = array();
+    private $cumulativeJobs    = array();
+    private $cumulativeWorkers = array();
 
     private $serversJobs    = array();
     private $serversWorkers = array();
@@ -43,14 +43,14 @@ class GearmanClusterAdmin
         $this->init();
     }
 
-    public function getAccumaltiveJobs()
+    public function getCumulativeJobs()
     {
-        return $this->accumaltiveJobs;
+        return $this->cumulativeJobs;
     }
 
-    public function getAccumaltiveWorkers()
+    public function getCumulativeWorkers()
     {
-        return $this->accumaltiveWorkers;
+        return $this->cumulativeWorkers;
     }
 
     public function getServersJobs()
@@ -65,7 +65,7 @@ class GearmanClusterAdmin
 
     private function init()
     {
-        // Run on all gearman servers and collect data and accumalate it
+        // Run on all gearman servers and collect data and accumulate it
         foreach ($this->hosts as $_server) {
             try{
                 $gm = new GearmanHost($_server);
@@ -87,15 +87,15 @@ class GearmanClusterAdmin
                 $running   = $job[GearmanHost::WORKER_RUNNING];
                 $available = $job[GearmanHost::WORKER_AVAILABLE];
 
-                if (!isset($this->accumaltiveJobs[$jobName])) {
-                    $this->accumaltiveJobs[$jobName][GearmanHost::WORKER_TOTAL]     = 0;
-                    $this->accumaltiveJobs[$jobName][GearmanHost::WORKER_RUNNING]   = 0;
-                    $this->accumaltiveJobs[$jobName][GearmanHost::WORKER_AVAILABLE] = 0;
+                if (!isset($this->cumulativeJobs[$jobName])) {
+                    $this->cumulativeJobs[$jobName][GearmanHost::WORKER_TOTAL]     = 0;
+                    $this->cumulativeJobs[$jobName][GearmanHost::WORKER_RUNNING]   = 0;
+                    $this->cumulativeJobs[$jobName][GearmanHost::WORKER_AVAILABLE] = 0;
                 }
 
-                $this->accumaltiveJobs[$jobName][GearmanHost::WORKER_TOTAL] += $total;
-                $this->accumaltiveJobs[$jobName][GearmanHost::WORKER_RUNNING] += $running;
-                $this->accumaltiveJobs[$jobName][GearmanHost::WORKER_AVAILABLE] = max($this->accumaltiveJobs[$jobName][GearmanHost::WORKER_AVAILABLE],
+                $this->cumulativeJobs[$jobName][GearmanHost::WORKER_TOTAL] += $total;
+                $this->cumulativeJobs[$jobName][GearmanHost::WORKER_RUNNING] += $running;
+                $this->cumulativeJobs[$jobName][GearmanHost::WORKER_AVAILABLE] = max($this->cumulativeJobs[$jobName][GearmanHost::WORKER_AVAILABLE],
                     $available);
             }
 
@@ -105,21 +105,21 @@ class GearmanClusterAdmin
                 $free      = $worker[GearmanHost::WORKER_AVAILABLE];
                 $queued    = $worker[GearmanHost::WORKER_QUEUED];
 
-                if (!isset($this->accumaltiveWorkers[$type])) {
-                    $this->accumaltiveWorkers[$type][GearmanHost::WORKER_TOTAL]     = 0;
-                    $this->accumaltiveWorkers[$type][GearmanHost::WORKER_RUNNING]   = 0;
-                    $this->accumaltiveWorkers[$type][GearmanHost::WORKER_AVAILABLE] = 0;
-                    $this->accumaltiveWorkers[$type][GearmanHost::WORKER_QUEUED]    = 0;
+                if (!isset($this->cumulativeWorkers[$type])) {
+                    $this->cumulativeWorkers[$type][GearmanHost::WORKER_TOTAL]     = 0;
+                    $this->cumulativeWorkers[$type][GearmanHost::WORKER_RUNNING]   = 0;
+                    $this->cumulativeWorkers[$type][GearmanHost::WORKER_AVAILABLE] = 0;
+                    $this->cumulativeWorkers[$type][GearmanHost::WORKER_QUEUED]    = 0;
                 }
 
-                $this->accumaltiveWorkers[$type][GearmanHost::WORKER_TOTAL] = max($available,
-                    $this->accumaltiveWorkers[$type][GearmanHost::WORKER_TOTAL]);
-                $this->accumaltiveWorkers[$type][GearmanHost::WORKER_RUNNING] += $running;
-                $this->accumaltiveWorkers[$type][GearmanHost::WORKER_QUEUED] += $queued;
+                $this->cumulativeWorkers[$type][GearmanHost::WORKER_TOTAL] = max($available,
+                    $this->cumulativeWorkers[$type][GearmanHost::WORKER_TOTAL]);
+                $this->cumulativeWorkers[$type][GearmanHost::WORKER_RUNNING] += $running;
+                $this->cumulativeWorkers[$type][GearmanHost::WORKER_QUEUED] += $queued;
             }
 
-            foreach ($this->accumaltiveWorkers as $type => $worker) {
-                $this->accumaltiveWorkers[$type][GearmanHost::WORKER_AVAILABLE] = ($worker[GearmanHost::WORKER_TOTAL] - $worker[GearmanHost::WORKER_RUNNING]);
+            foreach ($this->cumulativeWorkers as $type => $worker) {
+                $this->cumulativeWorkers[$type][GearmanHost::WORKER_AVAILABLE] = ($worker[GearmanHost::WORKER_TOTAL] - $worker[GearmanHost::WORKER_RUNNING]);
             }
         }
 
