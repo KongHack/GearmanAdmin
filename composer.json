@@ -1,0 +1,17 @@
+{
+  "name": "gcworld/gearmanadmin",
+  "description": "GearmanAdmin",
+  "authors": [
+    {
+      "name": "GameCharmer",
+      "email": "admin@gamecharmer.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"GCWorld\\GearmanAdmin\\": "src/"}
+  },
+  "require": {
+    "php":">=5.4"
+  },
+  "license":"proprietary"
+}
