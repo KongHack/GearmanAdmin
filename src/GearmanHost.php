@@ -119,7 +119,12 @@ class GearmanHost
         );
 
         for ($i = 0; $i < count($workers); $i++) {
-            @list($ip, $jobTypes) = explode(" : ", $workers[$i]);
+            $keywords = explode(':',$workers[$i]);
+            if(count($keywords) < 2) {
+                continue;
+            }
+            $ip = trim($keywords[0]);
+            $jobTypes = trim($keywords[1]);
 
             if (!empty($jobTypes)) {
                 $workerType = self::OTHER_WORKER;
